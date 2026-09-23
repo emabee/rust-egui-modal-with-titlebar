@@ -19,5 +19,5 @@ egui = { version = "0.36" }
 egui_extras = { version = "0.36", features = ["file", "image"] }
 
 [dev-dependencies]
-anyhow = "*"
+anyhow = "1.0"
 eframe = { version = "0.36" }

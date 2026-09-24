@@ -37,15 +37,20 @@ fn run() -> Result<()> {
 }
 struct TestApp {
     show_modal: bool,
-    modal_with_title: [ModalWithTitlebar; 2],
+    modal_with_title: [ModalWithTitlebar; 3],
     idx: usize,
 }
 impl TestApp {
     pub fn new() -> Self {
         Self {
             show_modal: false,
-            idx: 1,
+            idx: 2,
             modal_with_title: [
+                ModalWithTitlebar::new_with_optional_title(
+                    "without titlebar",
+                    None::<String>,
+                    true,
+                ),
                 ModalWithTitlebar::new("with title", "Great title", false),
                 ModalWithTitlebar::new(
                     "with title and close button",
@@ -62,7 +67,7 @@ impl App for TestApp {
             ui.label("Test!");
 
             if ui.button("Show the Popup!").clicked() {
-                self.idx = (self.idx + 1) % 2;
+                self.idx = (self.idx + 1) % 3;
                 self.show_modal = true;
             }
             ui.take_available_space();

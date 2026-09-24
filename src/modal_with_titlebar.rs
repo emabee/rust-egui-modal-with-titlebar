@@ -55,11 +55,27 @@ pub struct ModalWithTitlebar {
 }
 
 impl ModalWithTitlebar {
+    /// Creates a new Modal instance with titlebar and optionally a close button.
     #[must_use]
     pub fn new<I: Into<Id>, T: Into<String>>(id: I, title: T, with_close_button: bool) -> Self {
         Self {
             id: id.into(),
             title: Some(title.into()),
+            show_close_button: with_close_button,
+        }
+    }
+
+    /// Like `ModalWithTitlebar::new`, but allows omitting the titlebar completely by setting
+    /// `o_title` to `None`.
+    #[must_use]
+    pub fn new_with_optional_title<I: Into<Id>, T: Into<String>>(
+        id: I,
+        o_title: Option<T>,
+        with_close_button: bool,
+    ) -> Self {
+        Self {
+            id: id.into(),
+            title: o_title.map(Into::into),
             show_close_button: with_close_button,
         }
     }

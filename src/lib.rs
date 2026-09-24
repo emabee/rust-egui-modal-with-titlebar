@@ -1,3 +1,8 @@
+#![deny(missing_docs)]
+#![deny(clippy::all)]
+#![deny(clippy::pedantic)]
+#![forbid(unsafe_code)]
+
 //! A thin wrapper around `egui::Modal` that adds a title bar and an optional close button.
 //!
 //! ## Example
@@ -80,10 +85,6 @@
 //! }
 //!
 //! ```
-
-#![deny(clippy::all)]
-#![deny(clippy::pedantic)]
-#![forbid(unsafe_code)]
 
 mod modal_with_titlebar;
 pub use modal_with_titlebar::ModalWithTitlebar;

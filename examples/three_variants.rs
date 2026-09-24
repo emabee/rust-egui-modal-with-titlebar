@@ -37,43 +37,52 @@ fn run() -> Result<()> {
 }
 struct TestApp {
     show_modal: bool,
-    modal_with_title: ModalWithTitlebar,
+    idx: usize,
 }
 impl TestApp {
     pub fn new() -> Self {
         Self {
             show_modal: false,
-            modal_with_title: ModalWithTitlebar::new(
-                "with title and close button",
-                "",    //"Title of the Modal",
-                false, //true,
-            ),
+            idx: 2,
         }
     }
 }
 impl App for TestApp {
-    #[rustfmt::skip]
     fn ui(&mut self, ui: &mut Ui, _frame: &mut Frame) {
         CentralPanel::default().show(ui, |ui| {
             ui.label("Test!");
 
             if ui.button("Show the Popup!").clicked() {
+                self.idx = (self.idx + 1) % 3;
                 self.show_modal = true;
             }
             ui.take_available_space();
         });
 
         if self.show_modal {
-            let response = self.modal_with_title.show(ui.ctx(), |ui| {
+            let response = {
+                match self.idx {
+                    0 => ModalWithTitlebar::new_with_optional_title(
+                        "without titlebar",
+                        None::<String>,
+                        true,
+                    ),
+                    1 => ModalWithTitlebar::new("with title", "Great title", false),
+                    _ => ModalWithTitlebar::new(
+                        "with title and close button",
+                        "Great title AND close button -->",
+                        true,
+                    ),
+                }
+            }
+            .show(ui.ctx(), |ui| {
                 ui.set_width(300.);
-                ui.label("bli bla blub");
+
+                ui.label("bliblablub");
+
                 ui.button("Put it away!").clicked()
             });
-
-            if response.should_close()  // the user clicked outside the modal
-            || response.inner.0         // the user clicked our "Put it away!" button
-            || response.inner.1         // the user clicked the close button in the title bar
-            {
+            if response.should_close() || response.inner.0 || response.inner.1 {
                 self.show_modal = false;
             }
         }
